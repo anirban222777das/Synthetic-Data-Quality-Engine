@@ -110,9 +110,12 @@ pytest tests/ -v
 ## Documentation
 
 For deep technical details on the underlying mathematics and algorithms, see the `/docs` folder:
+- [Architecture](docs/architecture.md) - System design and data flow pipeline.
 - [Methodology](docs/methodology.md) - Details on Copulas, IQR cleaning, and Faker.
 - [Privacy](docs/privacy.md) - Details on the Laplace Mechanism.
 - [Validation](docs/validation.md) - Details on the KS-test and correlation scoring.
+- [Limitations](docs/limitations.md) - Known bounds on data types and memory.
+- [Development](docs/development.md) - Instructions for testing and contributing.
 
 ## Why Synthetic Data?
 
