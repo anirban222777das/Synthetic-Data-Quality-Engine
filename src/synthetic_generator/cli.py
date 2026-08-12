@@ -1,10 +1,22 @@
 import argparse
 import pandas as pd
+import json
+from dataclasses import asdict
 from .analyzer import DatasetAnalyzer
 from .generator import SyntheticGenerator
 from .validator import DatasetValidator
 from .privacy import PrivacyAnalyzer
 from .report import ReportGenerator
+from .schema import DatasetSchema, ColumnSchema, PrivacyWarning
+
+def dict_to_schema(d):
+    cols = {k: ColumnSchema(**v) for k, v in d.get('columns', {}).items()}
+    d['columns'] = cols
+    d['privacy_warnings'] = [PrivacyWarning(**w) for w in d.get('privacy_warnings', [])]
+    conds = d.get('conditional_schemas')
+    if conds:
+        d['conditional_schemas'] = {k: dict_to_schema(v) for k, v in conds.items()}
+    return DatasetSchema(**d)
 
 def analyze_cmd(args):
     df = pd.read_csv(args.input)
@@ -15,12 +27,15 @@ def analyze_cmd(args):
     schema.privacy_warnings = privacy.analyze(df)
     
     print(f"Analyzed dataset with {schema.num_rows} rows and {schema.num_columns} columns.")
-    # Here we would normally serialize schema if requested
+    if args.output:
+        with open(args.output, 'w') as f:
+            json.dump(asdict(schema), f, indent=2)
+        print(f"Schema saved to {args.output}")
 
 def generate_cmd(args):
-    df = pd.read_csv(args.input)
-    analyzer = DatasetAnalyzer()
-    schema = analyzer.analyze(df)
+    with open(args.input, 'r') as f:
+        schema_dict = json.load(f)
+    schema = dict_to_schema(schema_dict)
     
     generator = SyntheticGenerator(seed=args.seed)
     synth_df = generator.generate(schema, num_rows=args.rows)
@@ -70,7 +85,7 @@ def main():
     analyze_parser.add_argument("--output", help="Output schema JSON file")
     
     generate_parser = subparsers.add_parser("generate")
-    generate_parser.add_argument("input", help="Reference dataset CSV")
+    generate_parser.add_argument("input", help="Reference schema JSON file")
     generate_parser.add_argument("--rows", type=int, required=True, help="Number of rows to generate")
     generate_parser.add_argument("--output", required=True, help="Output synthetic CSV")
     generate_parser.add_argument("--seed", type=int, help="Random seed")
