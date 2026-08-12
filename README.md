@@ -1,5 +1,9 @@
 # Synthetic Data & Quality Analyzer
 
+![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
+![React 18](https://img.shields.io/badge/react-18-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 A professional, statistically rigorous synthetic data generation and quality validation pipeline built for modern data engineering teams.
 
 This project enables you to mathematically analyze any CSV dataset, infer statistical distributions and marginal probabilities, and synthesize highly realistic mock data while strictly protecting original data privacy. No Machine Learning or LLMs are used—just pure classical statistics, Numpy, and Pandas.
@@ -88,7 +92,7 @@ graph TD
     F -->|KS-Test, Correlation Error| G[Validation Quality Report]
 ```
 
-- **`DatasetAnalyzer`**: Ingests a DataFrame, computes means, standard deviations, categorical frequencies, IQR bounds, identifies PII sematics, and computes the Gaussian Copula correlation matrix.
+- **`DatasetAnalyzer`**: Ingests a DataFrame, computes means, standard deviations, categorical frequencies, IQR bounds, identifies PII semantics, and computes the Gaussian Copula correlation matrix.
 - **`SyntheticGenerator`**: Consumes the extracted JSON schema. Generates new variables from independent margins, applies the Cholesky decomposition for copula correlation, and synthesizes safe textual data.
 - **`DatasetValidator`**: Compares the source and synthetic data using the Kolmogorov-Smirnov test and numerical matrix differences to score generation quality.
 
@@ -119,6 +123,10 @@ For deep technical details on the underlying mathematics and algorithms, see the
 
 ## Why Synthetic Data?
 
-![Data Everywhere](assets/date-everywhere-data.gif)
+![Data Everywhere](assets/data-everywhere-data.gif)
 
 *Because data is everywhere, but privacy isn't. This engine ensures your engineering teams can build, test, and scale without ever exposing production PII.*
+
+## License
+
+This project is licensed under the MIT License.
