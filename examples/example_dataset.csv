@@ -1,0 +1,16 @@
+id,salary,age,rating,department
+1,45000.50,22,5,Sales
+2,150000.00,45,4,Engineering
+3,55000.00,28,3,Sales
+4,250000.00,55,5,Executive
+5,48000.25,24,,Marketing
+6,62000.00,31,4,Engineering
+7,49000.00,25,3,Sales
+8,,35,2,Marketing
+9,54000.00,29,5,Engineering
+10,47000.75,23,4,Sales
+11,350000.00,60,5,Executive
+12,58000.00,27,3,Engineering
+13,51000.00,26,,Sales
+14,60000.00,,4,Marketing
+15,46000.00,24,2,Sales
