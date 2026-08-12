@@ -14,6 +14,12 @@ This project enables you to mathematically analyze any CSV dataset, infer statis
 - **Primary Key Safety**: Detects highly unique identifier columns (e.g., `id`, `uuid`) and securely sequences them (`ID-1`, `ID-2`) without duplicating.
 - **Dynamic Precision Matching**: Infers the exact decimal precision or integer status of numeric data and strictly enforces formatting on the generated output.
 
+## Dashboard Preview
+
+![Dashboard Configuration](assets/dashboard-choice-screenshot.png)
+![Processing Pipeline](assets/pipeline-screenshot-3.png)
+![Validation Results](assets/result-screenshot.png)
+
 ## Visual Quality
 
 The generation engine outputs data that matches both the shape and the underlying correlations of your real data.
@@ -38,7 +44,7 @@ The generation engine outputs data that matches both the shape and the underlyin
 ### Environment Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/synthetic-data-quality.git
+git clone https://github.com/anirban222777das/Synthetic-Data-Quality-Engine.git
 cd synthetic-data-quality
 
 # Create and activate python virtual environment
@@ -67,12 +73,39 @@ chmod +x start_dashboard.sh
 - **Dashboard UI**: [http://localhost:5173](http://localhost:5173)
 - **API Backend**: [http://localhost:8000](http://localhost:8000)
 
-## API Architecture
+## Architecture Pipeline
 
-The backend is decoupled into three primary engines:
-1. `DatasetAnalyzer`: Ingests a DataFrame, computes means, standard deviations, categorical frequencies, IQR bounds, identifies PII sematics, and computes the Gaussian Copula correlation matrix.
-2. `SyntheticGenerator`: Consumes the extracted JSON schema. Generates new variables from independent margins, applies the Cholesky decomposition for copula correlation, and synthesizes safe textual data.
-3. `DatasetValidator`: Compares the source and synthetic data using the Kolmogorov-Smirnov test and numerical matrix differences to score generation quality.
+The system is decoupled into three primary engines communicating via a standardized JSON schema.
+
+```mermaid
+graph TD
+    A[Original CSV Dataset] --> B(DatasetAnalyzer)
+    B -->|Gaussian Copulas, IQR, Privacy| C{JSON Schema}
+    C --> D(SyntheticGenerator)
+    D -->|Faker, Marginal Inversion| E[Synthetic CSV Dataset]
+    A --> F(DatasetValidator)
+    E --> F
+    F -->|KS-Test, Correlation Error| G[Validation Quality Report]
+```
+
+- **`DatasetAnalyzer`**: Ingests a DataFrame, computes means, standard deviations, categorical frequencies, IQR bounds, identifies PII sematics, and computes the Gaussian Copula correlation matrix.
+- **`SyntheticGenerator`**: Consumes the extracted JSON schema. Generates new variables from independent margins, applies the Cholesky decomposition for copula correlation, and synthesizes safe textual data.
+- **`DatasetValidator`**: Compares the source and synthetic data using the Kolmogorov-Smirnov test and numerical matrix differences to score generation quality.
+
+## Limitations
+
+- **Structured Data Only**: This engine is designed exclusively for structured tabular data (CSVs). It does not generate or process unstructured text, images, or audio.
+- **No Cryptographic Anonymity**: While Differential Privacy (Laplace) masks aggregate statistics, this tool does not provide rigorous mathematical guarantees like k-anonymity for individual outliers unless extreme IQR clipping is enforced.
+- **Memory Bound**: The entire dataset is loaded into Pandas memory for analysis. For datasets exceeding your machine's RAM, data should be chunked or pre-sampled.
+
+## Development
+
+If you wish to contribute or modify the underlying mathematics, a robust test suite is included to ensure statistical integrity.
+
+```bash
+# Run the complete test suite
+pytest tests/ -v
+```
 
 ## Documentation
 
@@ -80,3 +113,9 @@ For deep technical details on the underlying mathematics and algorithms, see the
 - [Methodology](docs/methodology.md) - Details on Copulas, IQR cleaning, and Faker.
 - [Privacy](docs/privacy.md) - Details on the Laplace Mechanism.
 - [Validation](docs/validation.md) - Details on the KS-test and correlation scoring.
+
+## Why Synthetic Data?
+
+![Data Everywhere](assets/date-everywhere-data.gif)
+
+*Because data is everywhere, but privacy isn't. This engine ensures your engineering teams can build, test, and scale without ever exposing production PII.*
