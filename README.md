@@ -1,7 +1,7 @@
 # Synthetic Data & Quality Analyzer
 
 ![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
-![React](https://img.shields.io/badge/react-18-blue.svg)
+![React](https://img.shields.io/badge/react-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 A professional, statistically rigorous synthetic data generation and quality validation pipeline built for modern data engineering teams.
